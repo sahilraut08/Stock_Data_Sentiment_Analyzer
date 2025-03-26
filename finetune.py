@@ -1,6 +1,5 @@
 from datasets import load_dataset
 from transformers import AutoModelForSequenceClassification, AutoTokenizer, Trainer, TrainingArguments
-import torch
 
 dataset = load_dataset("financial_phrasebank", "sentences_50agree", trust_remote_code=True)
 
@@ -18,10 +17,12 @@ tokenized_datasets = dataset.map(tokenize_function, batched=True)
 training_args = TrainingArguments(
     output_dir="./results",
     eval_strategy="epoch",  
-    per_device_train_batch_size=8,
-    per_device_eval_batch_size=8,
+    per_device_train_batch_size=16,
+    per_device_eval_batch_size=16,
     num_train_epochs=3,
+    learning_rate=5e-5,
     weight_decay=0.01,
+    gradient_accumulation_steps=2,
 )
 
 trainer = Trainer(
@@ -32,3 +33,8 @@ trainer = Trainer(
 )
 
 trainer.train()
+
+model.save_pretrained("./models/finbert_finetuned")
+tokenizer.save_pretrained("./models/finbert_finetuned")
+
+print("Model and tokenizer saved successfully!")

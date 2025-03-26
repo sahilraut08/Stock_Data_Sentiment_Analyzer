@@ -12,7 +12,8 @@ app = FastAPI()
 NEWS_API_KEY = os.getenv("NEWS_API_KEY")
 NEWS_URL = f"https://newsapi.org/v2/everything?q=stocks&language=en&apiKey={NEWS_API_KEY}"
 
-sentiment_pipeline = pipeline("text-classification", model="ProsusAI/finbert")
+fine_tuned_model_path = "./models/finbert_finetuned" 
+sentiment_pipeline = pipeline("text-classification", model=fine_tuned_model_path)
 
 @app.get("/news/")
 def get_financial_news():

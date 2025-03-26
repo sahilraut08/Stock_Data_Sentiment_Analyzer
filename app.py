@@ -3,7 +3,9 @@ from transformers import pipeline
 
 app = FastAPI()
 
-sentiment_pipeline = pipeline("text-classification", model="yiyanghkust/finbert-tone")
+fine_tuned_model_path = "./models/finbert_finetuned" 
+sentiment_pipeline = pipeline("text-classification", model=fine_tuned_model_path)
+
 
 @app.post("/predict/")
 def predict(text: str):
